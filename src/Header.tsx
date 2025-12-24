@@ -1,4 +1,4 @@
-import { JSX } from "solid-js";
+import type { JSX } from "solid-js";
 import "./Header.css";
 
 export const Header = (props: { children: JSX.Element }) => {

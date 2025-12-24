@@ -1,6 +1,5 @@
 import { Portal } from "solid-js/web";
 import {
-  JSX,
   createContext,
   useContext,
   createSignal,
@@ -9,7 +8,7 @@ import {
   onCleanup,
   batch,
 } from "solid-js";
-import type { Accessor, Setter } from "solid-js";
+import type { JSX, Accessor, Setter } from "solid-js";
 import { BackIcon, CloseIcon, ChevronUpDownIcon } from "./Icons";
 import "./Modal.css";
 
