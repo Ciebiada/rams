@@ -1,5 +1,5 @@
 export const BackIcon = () => (
-    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="30 0 512 512">
         <path
             fill="none"
             stroke="currentColor"
@@ -7,7 +7,6 @@ export const BackIcon = () => (
             stroke-linejoin="round"
             stroke-width="48"
             d="M328 112L184 256l144 144"
-            transform="translate(-30, 0)"
         />
     </svg>
 );
@@ -51,7 +50,7 @@ export const CloseIcon = () => (
 );
 
 export const ChevronRightIcon = () => (
-    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="-30 0 512 512">
         <path
             fill="none"
             stroke="currentColor"
@@ -59,7 +58,6 @@ export const ChevronRightIcon = () => (
             stroke-linejoin="round"
             stroke-width="48"
             d="M184 112l144 144-144 144"
-            transform="translate(30, 0)"
         />
     </svg>
 );
