@@ -54,7 +54,6 @@
   background-color: var(--modal-background-color);
   display: flex;
   flex-direction: column;
-  padding-bottom: var(--modal-offset, 0px);
   overflow: hidden;
   overscroll-behavior: contain;
 }
