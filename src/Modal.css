@@ -3,6 +3,8 @@
   inset: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
+  touch-action: none;
+  overscroll-behavior: contain;
 }
 
 .modal-overlay[data-expanded] {
@@ -40,6 +42,7 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  touch-action: none;
 }
 
 .modal-content {
@@ -48,10 +51,10 @@
   max-width: 500px;
   height: calc(100dvh - env(safe-area-inset-top, 0px));
   border-radius: 32px 32px 0 0;
-  background: var(--modal-background-color);
+  background-color: var(--modal-background-color);
   display: flex;
   flex-direction: column;
-  padding-bottom: calc(32px + env(safe-area-inset-bottom));
+  padding-bottom: var(--modal-offset, 0px);
   overflow: hidden;
   overscroll-behavior: contain;
 }
@@ -68,14 +71,13 @@
   transform: translateX(-50%);
   width: 36px;
   height: 5px;
-  background-color: rgba(60, 60, 67, 0.3);
+  background-color: color-mix(in srgb, var(--text-color), transparent 80%);
   border-radius: 2.5px;
   flex-shrink: 0;
   cursor: grab;
   z-index: 10;
 }
 
-/* Hit area expansion for the handle */
 .modal-handle::after {
   content: "";
   position: absolute;
@@ -89,20 +91,12 @@
   cursor: grabbing;
 }
 
-@media (prefers-color-scheme: dark) {
-  .modal-handle {
-    background-color: rgba(235, 235, 245, 0.3);
-  }
-}
-
-/* Fixed header - stays in place during page transitions */
 .modal-fixed-header {
   padding: 16px;
   display: flex;
   position: relative;
   align-items: center;
   flex-shrink: 0;
-  margin-bottom: 8px;
   cursor: grab;
   user-select: none;
   -webkit-user-select: none;
@@ -120,11 +114,8 @@
   font-size: inherit;
   font-weight: 600;
   pointer-events: none;
-  user-select: none;
-  -webkit-user-select: none;
 }
 
-/* Icon morphing inside the button */
 .modal-icon {
   position: absolute;
   top: 50%;
@@ -141,12 +132,16 @@
   opacity: 1;
 }
 
-/* Pages container - this is what slides */
 .modal-pages-container {
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-height: 0;
   overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
 }
 
 .modal-button {
@@ -162,9 +157,18 @@
   margin: 8px 16px;
   padding: 12px 16px;
   border-radius: 32px;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-user-select: none;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.1s ease;
+}
+
+.modal-button svg {
+  width: 18px;
+  height: 18px;
 }
 
 .modal-button-danger {
@@ -173,12 +177,13 @@
 
 @media (hover: hover) {
   .modal-button:hover {
-    filter: brightness(0.8);
+    background-color: color-mix(in srgb, var(--element-background-color), var(--text-color) 8%);
   }
 }
 
-.modal-button:active {
-  filter: brightness(2);
+.modal-button:active,
+.modal-select-wrapper:active .modal-button {
+  background-color: color-mix(in srgb, var(--element-background-color), var(--text-color) 15%);
 }
 
 .modal-toggle {
@@ -189,15 +194,14 @@
   margin: 8px 16px;
   padding: 12px 16px;
   border-radius: 32px;
-  -webkit-user-select: none;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 .modal-toggle-label {
   font-size: 16px;
   font-weight: 500;
-  -webkit-user-select: none;
-  user-select: none;
 }
 
 .modal-toggle-switch {
@@ -208,6 +212,7 @@
   cursor: pointer;
   flex-shrink: 0;
   -webkit-tap-highlight-color: transparent;
+  touch-action: none;
 }
 
 .modal-toggle-switch input {
@@ -219,7 +224,7 @@
 .modal-toggle-slider {
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.23);
+  background-color: color-mix(in srgb, var(--text-color), transparent 85%);
   transition: background-color 0.2s ease;
   border-radius: 15.5px;
 }
@@ -256,9 +261,9 @@
 .modal-page {
   display: flex;
   flex-direction: column;
+  min-height: calc(100% + 1px);
 }
 
-/* Page animations - whole page slides, button stays fixed and morphs */
 .modal-page[data-animate="forward"] {
   animation: page-slide-in-forward var(--animation-duration) cubic-bezier(0.36, 0.66, 0.04, 1);
 }
@@ -296,4 +301,59 @@
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+.modal-select-wrapper {
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.modal-select-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary-color);
+}
+
+.modal-select-value {
+  font-size: 14px;
+}
+
+.modal-native-select {
+  position: absolute;
+  inset: 8px 16px;
+  opacity: 0;
+  cursor: pointer;
+  width: calc(100% - 32px);
+  height: calc(100% - 16px);
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.modal-slider-wrapper {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  background-image: linear-gradient(90deg,
+      color-mix(in srgb, var(--text-color), transparent 90%) 0%,
+      color-mix(in srgb, var(--text-color), transparent 90%) var(--slider-progress),
+      transparent var(--slider-progress),
+      transparent 100%);
+}
+
+.modal-slider-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary-color);
+}
+
+.modal-slider-value {
+  font-size: 14px;
 }

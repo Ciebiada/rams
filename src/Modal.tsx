@@ -1,8 +1,8 @@
 import { Portal } from "solid-js/web";
 import {
   JSX,
-  Accessor,
-  Setter,
+  type Accessor,
+  type Setter,
   createContext,
   useContext,
   createSignal,
@@ -11,7 +11,7 @@ import {
   onCleanup,
   batch,
 } from "solid-js";
-import { BackIcon, CloseIcon } from "./Icons";
+import { BackIcon, CloseIcon, ChevronUpDownIcon } from "./Icons";
 import "./Modal.css";
 
 const MODAL_ANIMATION_DURATION = 400;
@@ -298,7 +298,6 @@ export const Modal = (props: ModalProps) => {
           <div
             class="modal-positioner"
             onClick={handleOverlayClick}
-            ref={(el) => el.addEventListener("touchmove", preventTouchMove, { passive: false })}
           >
             <div
               class="modal-content"
@@ -306,6 +305,7 @@ export const Modal = (props: ModalProps) => {
               data-closed={isClosing() ? "" : undefined}
               style={{
                 "--animation-duration": `${sheet.animationDuration()}ms`,
+                "--modal-offset": `${sheet.modalPosition() + sheet.dragOffsetY()}px`,
                 transform: `translateY(${sheet.modalPosition() + sheet.dragOffsetY()}px)`,
                 transition: sheet.isDragging()
                   ? "none"
@@ -394,9 +394,106 @@ export const ModalToggle = (props: ModalToggleProps) => {
     <div class="modal-toggle">
       <span class="modal-toggle-label">{props.label}</span>
       <label class="modal-toggle-switch">
-        <input type="checkbox" checked={props.checked()} onChange={(e) => props.onChange(e.currentTarget.checked)} />
+        <input
+          type="checkbox"
+          checked={props.checked()}
+          onChange={(e) => props.onChange(e.currentTarget.checked)}
+        />
         <span class="modal-toggle-slider"></span>
       </label>
+    </div>
+  );
+};
+
+type ModalSelectProps = {
+  label: string;
+  value: string | number;
+  displayValue?: string | number;
+  onChange: (value: string) => void;
+  children: JSX.Element;
+};
+
+export const ModalSelect = (props: ModalSelectProps) => {
+  return (
+    <div class="modal-select-wrapper">
+      <div class="modal-button">
+        <span>{props.label}</span>
+        <div class="modal-select-content">
+          <span class="modal-select-value">{props.displayValue ?? props.value}</span>
+          <ChevronUpDownIcon />
+        </div>
+      </div>
+      <select
+        class="modal-native-select"
+        value={props.value}
+        onChange={(e) => props.onChange(e.currentTarget.value)}
+      >
+        {props.children}
+      </select>
+    </div>
+  );
+};
+
+type ModalSliderProps = {
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step?: number;
+  onChange: (value: number) => void;
+  displayValue?: string;
+};
+
+export const ModalSlider = (props: ModalSliderProps) => {
+  let sliderRef: HTMLDivElement | undefined;
+  const [isSliding, setIsSliding] = createSignal(false);
+  const [startX, setStartX] = createSignal(0);
+  const [startValue, setStartValue] = createSignal(0);
+
+  const handlePointerDown = (e: PointerEvent) => {
+    setIsSliding(true);
+    setStartX(e.clientX);
+    setStartValue(props.value);
+    sliderRef?.setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e: PointerEvent) => {
+    if (!isSliding() || !sliderRef) return;
+    const deltaX = e.clientX - startX();
+    const rect = sliderRef.getBoundingClientRect();
+    const deltaValue = (deltaX / rect.width) * (props.max - props.min);
+    const rawValue = startValue() + deltaValue;
+    const steppedValue = Math.round(rawValue / (props.step ?? 1)) * (props.step ?? 1);
+    const finalValue = Math.max(props.min, Math.min(props.max, steppedValue));
+    if (finalValue !== props.value) {
+      props.onChange(finalValue);
+    }
+  };
+
+  const handlePointerUp = (e: PointerEvent) => {
+    setIsSliding(false);
+    sliderRef?.releasePointerCapture(e.pointerId);
+  };
+
+  const percentage = () => ((props.value - props.min) / (props.max - props.min)) * 100;
+
+  return (
+    <div
+      ref={sliderRef}
+      class="modal-slider-wrapper modal-button"
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+      style={{
+        "touch-action": "pan-y",
+        "--slider-progress": `${percentage()}%`,
+      }}
+    >
+      <span>{props.label}</span>
+      <div class="modal-slider-content">
+        <span class="modal-slider-value">{props.displayValue ?? props.value}</span>
+      </div>
     </div>
   );
 };

@@ -64,6 +64,32 @@ export const ChevronRightIcon = () => (
     </svg>
 );
 
+export const ChevronUpDownIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <path
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="48"
+            d="M128 192l128-128 128 128M128 320l128 128 128-128"
+        />
+    </svg>
+);
+
+export const ChevronsLeftRightIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <path
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="48"
+            d="M160 128L32 256l128 128M352 128l128 128-128 128"
+        />
+    </svg>
+);
+
 export const CheckIcon = () => (
     <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
         <path
