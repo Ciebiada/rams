@@ -1,3 +1,4 @@
+/** @jsxImportSource solid-js */
 import { Portal } from "solid-js/web";
 import {
   createContext,
