@@ -61,7 +61,9 @@ export const Modal = (props: ModalProps) => {
   const closeWithAnimation = async (fast?: boolean) => {
     if (isClosing() || !isVisible()) return;
 
-    const duration = fast ? MODAL_FAST_ANIMATION_DURATION : MODAL_ANIMATION_DURATION;
+    const duration = fast
+      ? MODAL_FAST_ANIMATION_DURATION
+      : MODAL_ANIMATION_DURATION;
     setIsClosing(true);
 
     batch(() => {
@@ -149,38 +151,56 @@ export const Modal = (props: ModalProps) => {
             data-closed={isClosing() ? "" : undefined}
             style={{ "--animation-duration": `${sheet.animationDuration()}ms` }}
             onClick={handleOverlayClick}
-            ref={(el) => el.addEventListener("touchmove", preventTouchMove, { passive: false })}
+            ref={(el) =>
+              el.addEventListener("touchmove", preventTouchMove, {
+                passive: false,
+              })
+            }
           />
-          <div
-            class="modal-positioner"
-            onClick={handleOverlayClick}
-          >
+          <div class="modal-positioner" onClick={handleOverlayClick}>
             <div
               class="modal-content"
               data-expanded={props.open() && !isClosing() ? "" : undefined}
               data-closed={isClosing() ? "" : undefined}
               style={{
                 "--animation-duration": `${sheet.animationDuration()}ms`,
-                "--modal-offset": `${sheet.modalPosition() + sheet.dragOffsetY()}px`,
-                transform: `translateY(${sheet.modalPosition() + sheet.dragOffsetY()}px)`,
+                height: `calc(100% - ${sheet.modalPosition() + sheet.dragOffsetY()}px)`,
                 transition: sheet.isDragging()
                   ? "none"
-                  : `transform ${sheet.animationDuration()}ms cubic-bezier(0.36, 0.66, 0.04, 1)`,
+                  : `height ${sheet.animationDuration()}ms cubic-bezier(0.36, 0.66, 0.04, 1)`,
               }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div class="modal-handle" onMouseDown={sheet.handleDragStart} onTouchStart={sheet.handleDragStart} />
-              <div class="modal-fixed-header" onMouseDown={sheet.handleDragStart} onTouchStart={sheet.handleDragStart}>
+              <div
+                class="modal-handle"
+                onMouseDown={sheet.handleDragStart}
+                onTouchStart={sheet.handleDragStart}
+              />
+              <div
+                class="modal-fixed-header"
+                onMouseDown={sheet.handleDragStart}
+                onTouchStart={sheet.handleDragStart}
+              >
                 <button
                   class="header-button"
-                  onClick={() => (modalStack.isRoot() ? closeWithAnimation() : modalStack.pop())}
+                  onClick={() =>
+                    modalStack.isRoot()
+                      ? closeWithAnimation()
+                      : modalStack.pop()
+                  }
                   onMouseDown={(e) => e.stopPropagation()}
                   onTouchStart={(e) => e.stopPropagation()}
                 >
-                  <span class="modal-icon" classList={{ "modal-icon-visible": modalStack.isRoot() }}>
+                  <span
+                    class="modal-icon"
+                    classList={{ "modal-icon-visible": modalStack.isRoot() }}
+                  >
                     <CloseIcon />
                   </span>
-                  <span class="modal-icon" classList={{ "modal-icon-visible": !modalStack.isRoot() }}>
+                  <span
+                    class="modal-icon"
+                    classList={{ "modal-icon-visible": !modalStack.isRoot() }}
+                  >
                     <BackIcon />
                   </span>
                 </button>
@@ -230,7 +250,10 @@ export const ModalButton = (props: ModalButtonProps) => {
   return (
     <button
       class="modal-button"
-      classList={{ "modal-button-danger": props.danger, [props.class!]: !!props.class }}
+      classList={{
+        "modal-button-danger": props.danger,
+        [props.class!]: !!props.class,
+      }}
       onClick={handleClick}
       style={props.style}
     >
@@ -275,7 +298,9 @@ export const ModalSelect = (props: ModalSelectProps) => {
       <div class="modal-button">
         <span>{props.label}</span>
         <div class="modal-select-content">
-          <span class="modal-select-value">{props.displayValue ?? props.value}</span>
+          <span class="modal-select-value">
+            {props.displayValue ?? props.value}
+          </span>
           <ChevronUpDownIcon />
         </div>
       </div>
@@ -319,7 +344,8 @@ export const ModalSlider = (props: ModalSliderProps) => {
     const rect = sliderRef.getBoundingClientRect();
     const deltaValue = (deltaX / rect.width) * (props.max - props.min);
     const rawValue = startValue() + deltaValue;
-    const steppedValue = Math.round(rawValue / (props.step ?? 1)) * (props.step ?? 1);
+    const steppedValue =
+      Math.round(rawValue / (props.step ?? 1)) * (props.step ?? 1);
     const finalValue = Math.max(props.min, Math.min(props.max, steppedValue));
     if (finalValue !== props.value) {
       props.onChange(finalValue);
@@ -331,7 +357,8 @@ export const ModalSlider = (props: ModalSliderProps) => {
     sliderRef?.releasePointerCapture(e.pointerId);
   };
 
-  const percentage = () => ((props.value - props.min) / (props.max - props.min)) * 100;
+  const percentage = () =>
+    ((props.value - props.min) / (props.max - props.min)) * 100;
 
   return (
     <div
@@ -348,7 +375,9 @@ export const ModalSlider = (props: ModalSliderProps) => {
     >
       <span>{props.label}</span>
       <div class="modal-slider-content">
-        <span class="modal-slider-value">{props.displayValue ?? props.value}</span>
+        <span class="modal-slider-value">
+          {props.displayValue ?? props.value}
+        </span>
       </div>
     </div>
   );
