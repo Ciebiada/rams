@@ -50,12 +50,16 @@ export const Modal = (props: ModalProps) => {
 
   const lockScroll = () => {
     document.body.style.overflow = "hidden";
+    document.body.style.overscrollBehavior = "none";
     document.documentElement.style.overflow = "hidden";
+    document.documentElement.style.overscrollBehavior = "none";
   };
 
   const unlockScroll = () => {
     document.body.style.overflow = "";
+    document.body.style.overscrollBehavior = "";
     document.documentElement.style.overflow = "";
+    document.documentElement.style.overscrollBehavior = "";
   };
 
   const closeWithAnimation = async (fast?: boolean) => {
