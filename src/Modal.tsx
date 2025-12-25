@@ -49,17 +49,11 @@ export const Modal = (props: ModalProps) => {
   const [isClosing, setIsClosing] = createSignal(false);
 
   const lockScroll = () => {
-    document.body.style.overflow = "hidden";
-    document.body.style.overscrollBehavior = "none";
-    document.documentElement.style.overflow = "hidden";
-    document.documentElement.style.overscrollBehavior = "none";
+    document.body.classList.add("modal-open");
   };
 
   const unlockScroll = () => {
-    document.body.style.overflow = "";
-    document.body.style.overscrollBehavior = "";
-    document.documentElement.style.overflow = "";
-    document.documentElement.style.overscrollBehavior = "";
+    document.body.classList.remove("modal-open");
   };
 
   const closeWithAnimation = async (fast?: boolean) => {
@@ -113,6 +107,10 @@ export const Modal = (props: ModalProps) => {
     } else if (isVisible() && !isClosing()) {
       closeWithAnimation();
     }
+  });
+
+  onCleanup(() => {
+    unlockScroll();
   });
 
   const handleKeyDown = (e: KeyboardEvent) => {
