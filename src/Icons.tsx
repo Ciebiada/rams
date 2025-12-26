@@ -153,7 +153,7 @@ export const AddIcon = () => (
       stroke="currentColor"
       stroke-linecap="round"
       stroke-linejoin="round"
-      stroke-width="32"
+      stroke-width="48"
       d="M256 112v288M400 256H112"
     />
   </svg>
