@@ -154,6 +154,7 @@ body.modal-open {
   overflow: hidden;
   -webkit-tap-highlight-color: transparent;
   transition: background-color 0.1s ease;
+  touch-action: none;
 }
 
 .modal-button svg {
@@ -267,6 +268,10 @@ body.modal-open {
   flex-direction: column;
   overflow-y: auto;
   overscroll-behavior: contain;
+  touch-action: none;
+}
+
+.modal-page-scrollable {
   touch-action: pan-y;
 }
 

@@ -226,10 +226,34 @@ type ModalPageProps = {
 
 export const ModalPage = (props: ModalPageProps) => {
   const { currentPage, direction } = useModal();
+  const [isScrollable, setIsScrollable] = createSignal(false);
+  let pageRef: HTMLDivElement | undefined;
+
+  const checkScrollable = () => {
+    if (pageRef) {
+      setIsScrollable(pageRef.scrollHeight > pageRef.clientHeight);
+    }
+  };
+
+  createEffect(() => {
+    if (currentPage() === props.id && pageRef) {
+      checkScrollable();
+
+      const observer = new ResizeObserver(checkScrollable);
+      observer.observe(pageRef);
+
+      onCleanup(() => observer.disconnect());
+    }
+  });
 
   return (
     <Show when={currentPage() === props.id}>
-      <div class="modal-page" data-animate={direction()}>
+      <div
+        ref={pageRef}
+        class="modal-page"
+        classList={{ "modal-page-scrollable": isScrollable() }}
+        data-animate={direction()}
+      >
         {props.children}
       </div>
     </Show>
