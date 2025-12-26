@@ -50,10 +50,12 @@ export const Modal = (props: ModalProps) => {
 
   const lockScroll = () => {
     document.body.classList.add("modal-open");
+    document.documentElement.classList.add("modal-open");
   };
 
   const unlockScroll = () => {
     document.body.classList.remove("modal-open");
+    document.documentElement.classList.remove("modal-open");
   };
 
   const closeWithAnimation = async (fast?: boolean) => {
