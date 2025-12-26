@@ -22,7 +22,7 @@ export const useSheetDrag = (onClose: () => void) => {
     lastTime = now;
     prevTime = now;
 
-    if (e instanceof TouchEvent) {
+    if ("touches" in e) {
       startY = e.touches[0].clientY;
       lastY = startY;
       prevY = startY;
@@ -41,7 +41,7 @@ export const useSheetDrag = (onClose: () => void) => {
     if (!isDragging()) return;
 
     let clientY: number;
-    if (e instanceof TouchEvent) {
+    if ("touches" in e) {
       e.preventDefault();
       clientY = e.touches[0].clientY;
     } else {
